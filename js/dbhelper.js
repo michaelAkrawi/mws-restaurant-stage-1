@@ -1,7 +1,7 @@
 /**
  * Common database helper functions.
  */
-class DBHelper {
+class DBHelper { 
 
   /**
    * Database URL.
