@@ -4,14 +4,14 @@ self.addEventListener('install', (event) => {
 
         var urlToCache = ['/',
             'js/main.js',
-            'css/styles.css',            
+            'css/styles.css',
             'js/dbhelper.js',
             'js/restaurant_info.js',
             'img/1.jpg',
             'img/10.jpg',
             'img/2.jpg',
             'img/3.jpg',
-            'img/4.jpg', 
+            'img/4.jpg',
             'img/5.jpg',
             'img/6.jpg',
             'img/7.jpg',
@@ -28,7 +28,6 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', function (event) {
 
-    console.log(event.request.url);
     event.respondWith(caches.match(event.request).then(function (response) {
         return response || fetch(event.request);
     }));
