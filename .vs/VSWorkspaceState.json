@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\css"
+    "\\css",
+    "\\data",
+    "\\img",
+    "\\js"
   ],
-  "SelectedNode": "\\css\\styles.css",
+  "SelectedNode": "\\js\\dbhelper.js",
   "PreviewInSolutionExplorer": false
 }
