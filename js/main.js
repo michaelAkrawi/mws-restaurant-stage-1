@@ -2,13 +2,28 @@ let restaurants,
     neighborhoods,
     cuisines
 var map
-var markers = []
+var markers = [];
+
+
+(function () {
+
+    const btnMap = document.getElementById('toogle-map');
+    btnMap.onclick = () => {
+        if (document.getElementById('map').style.display == 'block')
+            document.getElementById('map').style.display = "none";
+        else
+            document.getElementById('map').style.display = "block";
+    }
+
+
+})();
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
         .register('/sw.js')
         .then(function () { console.log("Service Worker Registered"); });
 }
+
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.

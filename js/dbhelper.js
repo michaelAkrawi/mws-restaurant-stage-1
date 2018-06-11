@@ -1,9 +1,12 @@
-import idb from 'idb';
+
+
+
 
 /**
  * Common database helper functions.
  */
 class DBHelper {
+
 
     /**
      * Database URL.
@@ -14,30 +17,62 @@ class DBHelper {
         return `http://localhost:${port}/data/restaurants.json`;
     }
 
+    static get getIdbRequest() {
+
+    }
+
+
+
     /**
      * Fetch all restaurants.
      */
     static fetchRestaurants(callback) {
-
-        idb.open('db-resturants', 'v1', function (upgradeDB) {
-            console.log('new db created');
-        });
-        
-
         fetch('http://localhost:1337/restaurants')
             .then(response => {
                 if (response.status == 200) {
-                    response.json().then(function (data) {                       
+                    response.json().then(function (data) {
+
+                        DBHelper.createDbInstance(data);
                         callback(null, data);
-                    });                    
+                    });
                 }
                 else {
                     console.log('Seems like there is a problem status:' + response.statusText);
                 }
-
-
             })
-            .catch(error => { console.log(error); });        
+            .catch(error => { console.log(error); });
+    }
+
+    static createDbInstance(restaurants) {
+
+        if (window.indexedDB) {
+            var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+
+            const request = indexedDB.open('db-resturants', 2);
+            request.onerror = err => { console.log(err) };
+
+            request.onupgradeneeded = function (event) {
+
+                var db = event.target.result;
+                var store = db.createObjectStore('restaurants-store', { keyPath: 'id' });
+                var index = store.createIndex("by-id", "id");                            
+            }
+
+            request.onsuccess = succ => {
+
+                var db = request.result;
+                var tx = db.transaction('restaurants-store', 'readwrite');
+                var store = tx.objectStore('restaurants-store');
+
+                restaurants.forEach(function (res) {
+                    store.put(res);
+                });
+
+                tx.complete = () => {
+                    db.close();
+                };
+            };                     
+        }
     }
 
     /**

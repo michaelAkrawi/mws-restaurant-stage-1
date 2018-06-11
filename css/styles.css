@@ -84,8 +84,8 @@ nav {
             font-weight: 200;
             letter-spacing: 10px;
             text-transform: uppercase;
-            display:block;
-            padding:20px;
+            display: inline-block;
+            padding: 20px;
         }
 
 #breadcrumb {
@@ -125,6 +125,7 @@ nav {
     height: 400px;
     width: 100%;
     background-color: #ccc;
+    display: none;
 }
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
@@ -207,7 +208,7 @@ nav {
     #restaurants-list p {
         margin: 0;
         font-size: 11pt;
-    } 
+    }
 
     #restaurants-list li a {
         background-color: #008CBA;
@@ -277,7 +278,6 @@ nav {
     background: blue none repeat scroll 0 0;
     width: 100%;
     height: 500px;
-    
 }
 
 .inside #map {
@@ -287,7 +287,7 @@ nav {
 }
 
 .inside #footer {
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 #restaurant-name {
@@ -334,7 +334,6 @@ nav {
     border-top: 1px solid #fff;
     padding: 40px 40px 30px;
     /*width: 50%;*/
-   
 }
 
 #reviews-container {
@@ -363,7 +362,7 @@ nav {
         overflow: hidden;
         padding: 10px;
         position: relative;
-        border-radius:2px;
+        border-radius: 2px;
         width: 85%;
     }
 

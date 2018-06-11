@@ -4,17 +4,25 @@
 <head>
     <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="js/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#005e8f" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <title>Restaurant Reviews</title>
 </head>
 
 <body>
     <header>
         <nav>
-            <h1><a href="/">Restaurant Reviews</a></h1>
+            <h1>
+                <a href="/">Restaurant Reviews</a>
+                <a id="toogle-map" aria-label="Toogle Map" title="Toogle map">
+                    <i class="fas fa-map-pin"></i>
+                </a>
+            </h1>
         </nav>
     </header>
-     
+
     <main id="maincontent">
         <section id="map-container" tabindex="-1" role="application">
             <div id="map"></div>
@@ -32,7 +40,7 @@
             <div class="=conatiner">
                 <ul id="restaurants-list"></ul>
             </div>
-            
+
         </section>
     </main>
 
