@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#005e8f" />
+
+    <!-- styles -->
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+
+    <!-- js files -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/dbhelper.js"></script>
+    <script type="text/javascript" src="js/review.js"></script>
+
+</head>
+<body>
+    <main id="maincontent">
+        <section id="restaurant-container">
+            <div id="restaruant-info">
+            </div>
+            
+            
+            <form id="user-review-form">
+                <div class="form-group">
+                    <div>
+                        <label> Name </label>
+                    </div>
+                    <div>
+                        <input id="txb-firstname" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label>
+                            Review
+                        </label>
+                    </div>
+                    <div>
+                        <textarea id="txb-reivew" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label>Rating</label>
+                    </div>
+                    <div>
+                        <ul id="ul-review">
+                            <li>
+                                <a aria-label="Poor" title="Poor"><i class="fas fa-star"></i></a>
+                            </li>
+                            <li>
+                                <a aria-label="Fair" title="Fair"><i class="fas fa-star"></i></a>
+                            </li>
+                            <li>
+                                <a aria-label="Good" title="Good"><i class="fas fa-star"></i></a>
+                            </li>
+                            <li>
+                                <a aria-label="Excellent" title="Excellent"><i class="fas fa-star"></i></a>
+                            </li>
+                            <li>
+                                <a aria-label="WOW!!" title="WOW!!"><i class="fas fa-star"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+    </main>
+</body>
+</html>

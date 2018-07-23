@@ -97,9 +97,12 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h3');
+    const post = document.getElementById('post-review');
     title.innerHTML = 'Reviews';
     title.tabIndex = 0;
     container.appendChild(title);
+    post.setAttribute('href', `review.html?id=${self.restaurant.id}`);
+
 
     if (!reviews) {
         const noReviews = document.createElement('p');

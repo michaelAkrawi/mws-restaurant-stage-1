@@ -373,3 +373,66 @@ nav {
 #restaurant-hours td {
     color: #666;
 }
+
+
+/* ========================================================================= Reviews =================================================================================*/
+
+#post-review {
+    background-color: #428bca;
+    border-color: #357ebd;
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #fff;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+#user-review-form ul {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+    #user-review-form ul > li {
+        float: left;
+        display: inline-block;
+    }
+
+        #user-review-form ul > li a {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+    #user-review-form ul i {
+        color: #ccc;
+        font-size: 28px;
+    }
+
+    #user-review-form ul li.checked i {
+        color: gold;
+    }
+
+    #user-review-form ul li.selected i {
+        color: orange;
+    }
+
+#user-review-form .form-control {
+    padding: 10px;
+    border-radius: 3px;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    width: 100%;
+}
+
+#user-review-form .form-group {
+    margin: 0;
+    padding: 15px 10px;
+}
+
+#user-review-form {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
