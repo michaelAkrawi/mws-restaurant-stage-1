@@ -20,25 +20,25 @@
         <section id="restaurant-container">
             <div id="restaruant-info">
             </div>
-            
-            
+
+
             <form id="user-review-form">
                 <div class="form-group">
                     <div>
                         <label> Name </label>
                     </div>
                     <div>
-                        <input id="txb-firstname" type="text" class="form-control" />
+                        <input id="txb-firstname" type="text" class="form-control" required />
                     </div>
                 </div>
                 <div class="form-group">
                     <div>
                         <label>
-                            Review
+                            Comments
                         </label>
                     </div>
                     <div>
-                        <textarea id="txb-reivew" rows="5" class="form-control"></textarea>
+                        <textarea id="txb-reivew" rows="5" class="form-control" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,6 +63,15 @@
                                 <a aria-label="WOW!!" title="WOW!!"><i class="fas fa-star"></i></a>
                             </li>
                         </ul>
+                        <div id="rate-flag">                           
+                          <span id="rate-flag-text">                              
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group submit">
+                    <div>
+                        <a id="post-review">Submit Your Review</a>
                     </div>
                 </div>
             </form>

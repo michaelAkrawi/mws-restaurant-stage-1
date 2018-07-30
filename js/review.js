@@ -1,11 +1,13 @@
 // JavaScript source code
 
+
 const MAX_RATE = 5;
 
 $(document).ready(function () {
 
     bindEvents();
     fetchRestaurant();
+
 });
 
 
@@ -53,8 +55,11 @@ function fillRestaurantHTML(restaurant) {
  **/
 function bindEvents() {
 
-    let anchors = document.querySelectorAll('#ul-review a');
-    let ul = document.getElementById('ul-review');
+    const anchors = document.querySelectorAll('#ul-review a');
+    const ul = document.getElementById('ul-review');
+    const review = document.getElementById('post-review');
+    const form = document.querySelector('form');
+
     anchors.forEach(function (a) {
         a.addEventListener('mouseover', function () {
             onRateStarsHover(a.parentElement);
@@ -68,14 +73,41 @@ function bindEvents() {
     ul.addEventListener('mouseleave', function () {
         resetRateStars();
     });
+
+    review.addEventListener('click', function (e) {
+        postUserReview();
+    });
+    
 }
 
+function postUserReview() {
+
+
+    const review = {
+        id: getParameterByName('id'),
+        name: document.getElementById('txb-firstname').value,
+        comments: document.getElementById('txb-reivew').value,
+        rating: document.querySelectorAll('#ul-review li.selected').length
+    }
+
+    DBHelper.postNewReview(review);
+}
+
+/*
+ * reset user rating selection 
+ */
 function resetRateStars() {
 
     const items = document.querySelectorAll('#ul-review li');
     items.forEach(function (item) {
-        item.classList = "";
+        $(item).removeClass('checked');
     });
+
+    const rate = document.querySelectorAll('.selected');
+    if (rate.length == 0) {
+        const flag = document.getElementById('rate-flag');
+        flag.style.display = 'none';
+    }
 }
 
 
@@ -98,6 +130,14 @@ function onRateStarsHover(li) {
 
         j++;
     }
+
+    const flag = document.getElementById('rate-flag');
+    const flagText = document.getElementById('rate-flag-text');
+
+    flag.style.display = 'inline-block';
+    const $a = $(li).find('a');
+    flagText.innerHTML = $a.attr('title');
+
 }
 
 
@@ -139,6 +179,8 @@ getParameterByName = (name, url) => {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+
 
 
 

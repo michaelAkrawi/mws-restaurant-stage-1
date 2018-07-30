@@ -30,11 +30,13 @@ class DBHelper {
         fetch('http://localhost:1337/restaurants')
             .then(response => {
                 if (response.status == 200) {
-                    response.json().then(function (data) {
+                    response.json()
+                        .then(function (data) {
 
-                        DBHelper.createDbInstance(data);
-                        callback(null, data);
-                    });
+
+                            DBHelper.createDbInstance(data);
+                            callback(null, data);
+                        });
                 }
                 else {
                     console.log('Seems like there is a problem status:' + response.statusText);
@@ -55,7 +57,7 @@ class DBHelper {
 
                 var db = event.target.result;
                 var store = db.createObjectStore('restaurants-store', { keyPath: 'id' });
-                var index = store.createIndex("by-id", "id");                            
+                var index = store.createIndex("by-id", "id");
             }
 
             request.onsuccess = succ => {
@@ -71,8 +73,24 @@ class DBHelper {
                 tx.complete = () => {
                     db.close();
                 };
-            };                     
+            };
         }
+    }
+
+    static fetchRestaurantReview(id, callback) {
+        fetch('http://localhost:1337/reviews/?restaurant_id=' + id)
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then(review => {
+                        callback(null, review);
+                    });
+                }
+                else {
+                    console.log('error getting reviews for restaurant status' + response.status);
+                }
+            }).catch(error => {
+                console.log(error);
+            });
     }
 
     /**
@@ -86,7 +104,13 @@ class DBHelper {
             } else {
                 const restaurant = restaurants.find(r => r.id == id);
                 if (restaurant) { // Got the restaurant
-                    callback(null, restaurant);
+
+                    DBHelper.fetchRestaurantReview(id, function (error, reviews) {
+
+                        restaurant.reviews = reviews;
+                        callback(null, restaurant);
+                    });
+
                 } else { // Restaurant does not exist in the database
                     callback('Restaurant does not exist', null);
                 }
@@ -210,6 +234,25 @@ class DBHelper {
         }
         );
         return marker;
+    }
+
+    /**
+     * Post new user review.
+     */
+    static postNewReview(review) {
+        fetch('http://localhost:1337/reviews/',
+            {
+                method: 'POST',
+                body: JSON.stringify(review),
+                headers: { 'Content-Type': 'application/json' },
+
+
+            }).then(res => {
+                res.json().then(succsess => { console.log(succsess); })
+            })
+            .catch(error => { console.log(error) });
+
+
     }
 
 }
