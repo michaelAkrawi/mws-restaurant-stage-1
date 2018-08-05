@@ -1,5 +1,31 @@
 // JavaScript source code
 
+document.addEventListener('DOMContentLoaded', function (event) {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(function (reg) {
+            if ('sync' in reg) {
+
+                const form = document.getElementById('user-review-form');
+                form.addEventListener('submit', function (e) {
+
+                    e.preventDefault();
+                    const review = createNewReview();
+                    DBHelper.postNewReview(review, function (error, result) {
+                        if (error) {
+                            store.write(review);
+                        } else {
+                            window.location.replace(`http://localhost:90/restaurant.html?id=${review.id}`);
+                        }
+                    });
+                });
+            }
+        }).catch(function (err) {
+            console.error(err); // the Service Worker didn't install correctly
+            
+        });
+    }
+});
+
 
 const MAX_RATE = 5;
 
@@ -41,6 +67,7 @@ function fillRestaurantHTML(restaurant) {
     $name.attr('id', 'restaurant-name');
     let $img = $('<img>');
     $img.attr('id', 'restaurant-img');
+    $img.attr('alt', `image of ${restaurant.name}`);
     $name.html(restaurant.name);
     $(container).append($name);
     $img.attr('src', DBHelper.imageUrlForRestaurant(restaurant));
@@ -57,7 +84,6 @@ function bindEvents() {
 
     const anchors = document.querySelectorAll('#ul-review a');
     const ul = document.getElementById('ul-review');
-    const review = document.getElementById('post-review');
     const form = document.querySelector('form');
 
     anchors.forEach(function (a) {
@@ -69,17 +95,43 @@ function bindEvents() {
             setSelectedRate(a.parentElement);
         });
     });
-
-    ul.addEventListener('mouseleave', function () {
-        resetRateStars();
-    });
-
-    review.addEventListener('click', function (e) {
-        postUserReview();
-    });
-    
 }
 
+/*
+ * validate form contros before post.
+ */
+function validateReview() {
+
+    let valid = true;
+    const name = document.getElementById('txb-firstname');
+    const comments = document.getElementById('txb-reivew');
+    if (name.value == undefined || name.value == '') {
+        name.classList.add('has-error');
+        name.parentElement.parentElement.querySelector('label').classList.add('has-error-control-label');
+        valid = false;
+    }
+    else {
+        name.classList.remove('has-error');
+        name.parentElement.parentElement.querySelector('label').classList.remove('has-error-control-label');
+    }
+
+    if (comments.value == undefined || comments.value == '') {
+        comments.classList.add('has-error');
+        comments.parentElement.parentElement.querySelector('label').classList.add('has-error-control-label');
+        valid = false;
+
+    }
+    else {
+        comments.classList.remove('has-error');
+        comments.parentElement.parentElement.querySelector('label').classList.remove('has-error-control-label');
+    }
+
+    return valid;
+}
+
+/**
+ * post new user review on DB.
+ */
 function postUserReview() {
 
 
@@ -90,24 +142,31 @@ function postUserReview() {
         rating: document.querySelectorAll('#ul-review li.selected').length
     }
 
-    DBHelper.postNewReview(review);
+    DBHelper.postNewReview(review, function (error, result) {
+
+        if (error) {
+            console.log(error);
+            window.alert('Oopps!! something went wrong');
+        }
+        else {
+            window.alert('Thank you for your review');
+            window.location.replace('http://localhost:90/restaurant.html?id=' + review.id);
+        }
+    });
 }
 
-/*
- * reset user rating selection 
- */
-function resetRateStars() {
-
-    const items = document.querySelectorAll('#ul-review li');
-    items.forEach(function (item) {
-        $(item).removeClass('checked');
-    });
-
-    const rate = document.querySelectorAll('.selected');
-    if (rate.length == 0) {
-        const flag = document.getElementById('rate-flag');
-        flag.style.display = 'none';
+/**
+ *  Create new review from page inputs.
+ **/
+function createNewReview() {
+    const review = {
+        id: getParameterByName('id'),
+        name: document.getElementById('txb-firstname').value,
+        comments: document.getElementById('txb-reivew').value,
+        rating: document.querySelectorAll('#ul-review li.selected').length
     }
+
+    return review;
 }
 
 
@@ -131,10 +190,8 @@ function onRateStarsHover(li) {
         j++;
     }
 
-    const flag = document.getElementById('rate-flag');
-    const flagText = document.getElementById('rate-flag-text');
 
-    flag.style.display = 'inline-block';
+    const flagText = document.getElementById('rate-flag-text');
     const $a = $(li).find('a');
     flagText.innerHTML = $a.attr('title');
 

@@ -33,3 +33,20 @@ self.addEventListener('fetch', function (event) {
     }));
 
 });
+
+
+
+self.addEventListener('sync', function (event) {
+    event.waitUntil(store.read(function (db, error) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            const reviews = db.getAll();
+            reviews.forEach(function (rev) {
+                DBHelper.postNewReview(rev);
+            });
+        }        
+    }));
+});
+   

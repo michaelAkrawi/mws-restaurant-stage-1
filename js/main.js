@@ -159,6 +159,24 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
     const li = document.createElement('li');
 
+    const svg = document.createElement('i');
+    svg.className = 'fas fa-heart';
+    const favorite = document.createElement('a');
+    favorite.append(svg);
+    favorite.id = 'favorite-restaurant';
+    favorite.setAttribute('aria-label', 'favorite restaurant');
+    favorite.setAttribute('is_favorite', restaurant.is_favorite);
+    favorite.title = 'favorite restaurant';
+
+    favorite.addEventListener('click', () => {
+
+        let is_favorite = favorite.getAttribute('is_favorite') == "true";
+        favorite.setAttribute('is_favorite', !is_favorite);
+        setFavoriteRestaurant(restaurant.id, !is_favorite);
+    });
+    li.append(favorite);
+
+
     const image = document.createElement('img');
     image.className = 'restaurant-img';
     image.alt = `${restaurant.name} ${restaurant.cuisine_type} restaurant in ${restaurant.neighborhood}`;
@@ -181,10 +199,18 @@ createRestaurantHTML = (restaurant) => {
 
     const more = document.createElement('a');
     more.innerHTML = 'View Details';
+    more.id = 'view-more';
     more.href = DBHelper.urlForRestaurant(restaurant);
     li.append(more)
 
     return li
+}
+
+/**
+ * Store user favorite restaurant selection
+ */
+function setFavoriteRestaurant(id, isFavorite) {
+    DBHelper.setFavoriteRestaurant(id, isFavorite);
 }
 
 /**

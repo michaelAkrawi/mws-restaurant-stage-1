@@ -34,7 +34,7 @@ class DBHelper {
                         .then(function (data) {
 
 
-                            DBHelper.createDbInstance(data);
+                            DBHelper.createRestaurantsDbInstance(data);
                             callback(null, data);
                         });
                 }
@@ -45,7 +45,7 @@ class DBHelper {
             .catch(error => { console.log(error); });
     }
 
-    static createDbInstance(restaurants) {
+    static createRestaurantsDbInstance(restaurants) {
 
         if (window.indexedDB) {
             var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
@@ -82,6 +82,7 @@ class DBHelper {
             .then(response => {
                 if (response.status == 200) {
                     response.json().then(review => {
+                        
                         callback(null, review);
                     });
                 }
@@ -91,6 +92,34 @@ class DBHelper {
             }).catch(error => {
                 console.log(error);
             });
+    }
+
+    static createReviewsDbInstance(review) {
+        if (window.indexedDB) {
+            var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+
+            const request = indexedDB.open('db-reviews', 1);
+            request.onerror = err => { console.log(err) };
+
+            request.onupgradeneeded = function (event) {
+
+                var db = event.target.result;
+                var store = db.createObjectStore('reviews-store', { keyPath: 'id' });
+                var index = store.createIndex("by-id", "id");
+            }
+
+            request.onsuccess = succ => {
+
+                var db = request.result;
+                var tx = db.transaction('reviews-store', 'readwrite');
+                var store = tx.objectStore('reviews-store');
+
+                store.put(review);
+                tx.complete = () => {
+                    db.close();
+                };
+            };
+        }
     }
 
     /**
@@ -239,7 +268,8 @@ class DBHelper {
     /**
      * Post new user review.
      */
-    static postNewReview(review) {
+    static postNewReview(review, callback) {
+        
         fetch('http://localhost:1337/reviews/',
             {
                 method: 'POST',
@@ -248,9 +278,31 @@ class DBHelper {
 
 
             }).then(res => {
-                res.json().then(succsess => { console.log(succsess); })
+                res.json().then(succsess => {
+                    callback(null, succsess);
+                })
             })
-            .catch(error => { console.log(error) });
+            .catch(error => {
+                callback(error, null);
+            });
+
+
+    }
+
+    static setFavoriteRestaurant(restaurantId, is_favorite) {
+
+        fetch(`http://localhost:1337/restaurants/${restaurantId}/?is_favorite=${is_favorite}`,
+            {
+                method: 'PUT',
+
+            }).then(res => {
+                res.json().then(succsess => {
+
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            });
 
 
     }
