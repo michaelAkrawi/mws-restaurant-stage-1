@@ -172,7 +172,7 @@ createRestaurantHTML = (restaurant) => {
 
         let is_favorite = favorite.getAttribute('is_favorite') == "true";
         favorite.setAttribute('is_favorite', !is_favorite);
-        setFavoriteRestaurant(restaurant.id, !is_favorite);
+        setFavoriteRestaurant(restaurant, !is_favorite);
     });
     li.append(favorite);
 
@@ -209,8 +209,9 @@ createRestaurantHTML = (restaurant) => {
 /**
  * Store user favorite restaurant selection
  */
-function setFavoriteRestaurant(id, isFavorite) {
-    DBHelper.setFavoriteRestaurant(id, isFavorite);
+function setFavoriteRestaurant(restaurant, isFavorite) {
+    DBHelper.setFavoriteRestaurant(restaurant.id, isFavorite);
+    window.alert(`${restaurant.name} is now your new favorite restaurant`);
 }
 
 /**

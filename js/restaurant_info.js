@@ -1,6 +1,18 @@
 let restaurant;
 var map;
 
+
+/**
+ * Initialize service worker.
+ */
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.js')
+        .then(function () {  });
+}
+
+
+
 /** 
  * Initialize Google map, called from HTML.
  */
@@ -126,10 +138,7 @@ createReviewHTML = (review) => {
     const name = document.createElement('p');
     name.innerHTML = review.name;
     li.appendChild(name);
-
-    const date = document.createElement('p');
-    date.innerHTML = review.date;
-    li.appendChild(date);
+    
 
     const rating = document.createElement('p');
     rating.innerHTML = `Rating: ${review.rating}`;

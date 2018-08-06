@@ -10,21 +10,22 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
                     e.preventDefault();
                     const review = createNewReview();
-                    DBHelper.postNewReview(review, function (error, result) {
-                        if (error) {
-                            store.write(review);
-                        } else {
-                            window.location.replace(`http://localhost:90/restaurant.html?id=${review.id}`);
-                        }
-                    });
+                    postReview(null, review);
+                    //cacheReview(review, postReview);
+
                 });
             }
         }).catch(function (err) {
             console.error(err); // the Service Worker didn't install correctly
-            
-        });
+
+        });;
     }
 });
+
+
+
+
+
 
 
 const MAX_RATE = 5;
@@ -36,6 +37,23 @@ $(document).ready(function () {
 
 });
 
+
+/**
+ * Post user review.
+ */
+function postReview(error, review) {
+    if (error == null) {
+        DBHelper.postNewReview(review, function (error, result) {
+            if (error) {
+                store.write(review);
+            } else {
+
+                window.alert('Review has been submited!');
+                window.location.replace(`${window.location.origin}/restaurant.html?id=${review.id}`);
+            }
+        });
+    }
+}
 
 
 /**
@@ -129,38 +147,13 @@ function validateReview() {
     return valid;
 }
 
-/**
- * post new user review on DB.
- */
-function postUserReview() {
-
-
-    const review = {
-        id: getParameterByName('id'),
-        name: document.getElementById('txb-firstname').value,
-        comments: document.getElementById('txb-reivew').value,
-        rating: document.querySelectorAll('#ul-review li.selected').length
-    }
-
-    DBHelper.postNewReview(review, function (error, result) {
-
-        if (error) {
-            console.log(error);
-            window.alert('Oopps!! something went wrong');
-        }
-        else {
-            window.alert('Thank you for your review');
-            window.location.replace('http://localhost:90/restaurant.html?id=' + review.id);
-        }
-    });
-}
 
 /**
  *  Create new review from page inputs.
  **/
 function createNewReview() {
     const review = {
-        id: getParameterByName('id'),
+        restaurant_id: parseInt(getParameterByName('id')),
         name: document.getElementById('txb-firstname').value,
         comments: document.getElementById('txb-reivew').value,
         rating: document.querySelectorAll('#ul-review li.selected').length
@@ -236,6 +229,7 @@ getParameterByName = (name, url) => {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
 
 
 

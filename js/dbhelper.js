@@ -288,6 +288,7 @@ class DBHelper {
 
 
     }
+ 
 
     static setFavoriteRestaurant(restaurantId, is_favorite) {
 
