@@ -47,7 +47,6 @@ self.addEventListener('sync', function (event) {
             reviews.forEach(function (rev) {
                 DBHelper.postNewReview(rev);
             });
-        }        
+        }
     }));
 });
-   

@@ -4,7 +4,6 @@ let restaurants,
 var map
 var markers = [];
 
-
 (function () {
 
     const btnMap = document.getElementById('toogle-map');
@@ -15,9 +14,40 @@ var markers = [];
             document.getElementById('map').style.display = "block";
     }
 
+    if (navigator.onLine) {
+        fetchOfflieReviews();
+    }
 
 })();
 
+/*
+ * Fetch old reivews added on offline mode.
+ */
+function fetchOfflieReviews() {
+
+    if (window.indexedDB) {
+
+        reviewDbStoreObject.init(function (db) {
+            reviewDbStoreObject.getAll(function (data) {
+                data.forEach(function (r) {
+                    DBHelper.postNewReview(r, function (error, succsees) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            reviewDbStoreObject.delete(r.id);
+                        }
+                    });
+                })
+            });
+        });
+
+    }
+
+}
+
+/*
+ * Register Service worker for page.
+ */
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
         .register('/sw.js')

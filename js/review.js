@@ -10,9 +10,16 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
                     e.preventDefault();
                     const review = createNewReview();
-                    postReview(null, review);
-                    //cacheReview(review, postReview);
+                    if (navigator.onLine) {
+                        postReview(null, review);
+                    } else {
 
+                        reviewDbStoreObject.init(function (db) {
+                            reviewDbStoreObject.write(review, function () {
+                                window.alert('Ooops! it seems like you are having some connection problems, but dont worry your review will be submited anyway');
+                            });
+                        });
+                    }
                 });
             }
         }).catch(function (err) {
@@ -45,11 +52,11 @@ function postReview(error, review) {
     if (error == null) {
         DBHelper.postNewReview(review, function (error, result) {
             if (error) {
-                store.write(review);
+                console.log(error);
             } else {
 
                 window.alert('Review has been submited!');
-                window.location.replace(`${window.location.origin}/restaurant.html?id=${review.id}`);
+                window.location.replace(`${window.location.origin}/restaurant.html?id=${review.restaurant_id}`);
             }
         });
     }

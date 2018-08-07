@@ -94,33 +94,7 @@ class DBHelper {
             });
     }
 
-    static createReviewsDbInstance(review) {
-        if (window.indexedDB) {
-            var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
-
-            const request = indexedDB.open('db-reviews', 1);
-            request.onerror = err => { console.log(err) };
-
-            request.onupgradeneeded = function (event) {
-
-                var db = event.target.result;
-                var store = db.createObjectStore('reviews-store', { keyPath: 'id' });
-                var index = store.createIndex("by-id", "id");
-            }
-
-            request.onsuccess = succ => {
-
-                var db = request.result;
-                var tx = db.transaction('reviews-store', 'readwrite');
-                var store = tx.objectStore('reviews-store');
-
-                store.put(review);
-                tx.complete = () => {
-                    db.close();
-                };
-            };
-        }
-    }
+    
 
     /**
      * Fetch a restaurant by its ID.
